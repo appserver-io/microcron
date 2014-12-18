@@ -20,6 +20,7 @@
 namespace AppserverIo\Microcron;
 
 use Cron\CronExpression as SimpleCron;
+use Cron\FieldFactory;
 
 /**
  * AppserverIo\Microcron
@@ -69,6 +70,18 @@ class CronExpression extends SimpleCron
      * @var array $order
      */
     protected static $order = array(self::YEAR, self::MONTH, self::DAY, self::WEEKDAY, self::HOUR, self::MINUTE, self::SECOND);
+
+    /**
+     * Parse a CRON expression
+     *
+     * @param string       $expression   CRON expression (e.g. '8 * * * *')
+     * @param FieldFactory $fieldFactory Factory to create cron fields
+     */
+    public function __construct($expression, FieldFactory $fieldFactory)
+    {
+        $this->fieldFactory = $fieldFactory;
+        $this->setExpression($expression);
+    }
 
     /**
      * Factory method to create a new CronExpression.
