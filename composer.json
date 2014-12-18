@@ -13,12 +13,12 @@
 	},
 	"autoload" : {
 		"psr-4" : {
-			"AppserverIo\\Microcron" : "src/"
+			"AppserverIo\\Microcron\\" : "src/"
 		}
 	},
     "autoload-dev" : {
         "psr-4" : {
-            "AppserverIo\\Microcron" : "tests/"
+            "AppserverIo\\Microcron\\" : "tests/"
         }
     },
 	"config" : {
