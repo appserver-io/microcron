@@ -20,6 +20,7 @@
 namespace AppserverIo\Microcron;
 
 use Cron\AbstractField;
+use Cron\FieldInterface;
 use DateTime;
 
 /**
@@ -38,7 +39,12 @@ class SecondsField extends AbstractField
 {
 
     /**
-     * {@inheritdoc}
+     * Check if the respective value of a DateTime field satisfies a CRON exp
+     *
+     * @param DateTime $date  DateTime object to check
+     * @param string   $value CRON expression to test against
+     *
+     * @return bool Returns TRUE if satisfied, FALSE otherwise
      */
     public function isSatisfiedBy(DateTime $date, $value)
     {
@@ -46,7 +52,13 @@ class SecondsField extends AbstractField
     }
 
     /**
-     * {@inheritdoc}
+     * When a CRON expression is not satisfied, this method is used to increment
+     * or decrement a DateTime object by the unit of the cron field
+     *
+     * @param DateTime $date   DateTime object to change
+     * @param bool     $invert (optional) Set to TRUE to decrement
+     *
+     * @return FieldInterface
      */
     public function increment(DateTime $date, $invert = false)
     {
@@ -60,7 +72,11 @@ class SecondsField extends AbstractField
     }
 
     /**
-     * {@inheritdoc}
+     * Validates a CRON expression for a given field
+     *
+     * @param string $value CRON expression value to validate
+     *
+     * @return bool Returns TRUE if valid, FALSE otherwise
      */
     public function validate($value)
     {

@@ -47,7 +47,12 @@ class FieldFactory extends SimpleFieldFactory
     private $fields = array();
 
     /**
-     * {@inheritdoc}
+     * Get an instance of a field object for a cron expression position
+     *
+     * @param int $position CRON expression position value to retrieve
+     *
+     * @return \Cron\FieldInterface
+     * @throws \InvalidArgumentException if a position is not valid
      */
     public function getField($position)
     {

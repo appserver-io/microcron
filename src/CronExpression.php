@@ -72,10 +72,11 @@ class CronExpression extends SimpleCron
 
     /**
      * Factory method to create a new CronExpression.
+     * There are  several special predefined values which can be used to substitute the
+     * CRON expression. You might see them below
      *
-     * @param string $expression The CRON expression to create.  There are
-     *      several special predefined values which can be used to substitute the
-     *      CRON expression:
+     * @param string       $expression   The CRON expression to create
+     * @param FieldFactory $fieldFactory (optional) Field factory to use
      *
      *      @yearly, @annually) - Run once a year, midnight, Jan. 1 - 0 0 0 1 1 *
      *      @monthly - Run once a month, midnight, first of month - 0 0 0 1 * *
@@ -84,7 +85,6 @@ class CronExpression extends SimpleCron
      *      @hourly - Run once an hour, first minute - 0 0 * * * *
      *      @byMinute - Run once a minute, first second - 0 * * * * *
      *      @bySecond - Run once a second - * * * * * *
-     * @param FieldFactory $fieldFactory (optional) Field factory to use
      *
      * @return CronExpression
      */
@@ -138,9 +138,9 @@ class CronExpression extends SimpleCron
      * Get the next or previous run date of the expression relative to a date
      *
      * @param string|\DateTime $currentTime      (optional) Relative calculation date
-     * @param int             $nth              (optional) Number of matches to skip before returning
-     * @param bool            $invert           (optional) Set to TRUE to go backwards in time
-     * @param bool            $allowCurrentDate (optional) Set to TRUE to return the
+     * @param int              $nth              (optional) Number of matches to skip before returning
+     * @param bool             $invert           (optional) Set to TRUE to go backwards in time
+     * @param bool             $allowCurrentDate (optional) Set to TRUE to return the
      *     current date if it matches the cron expression
      *
      * @return \DateTime
