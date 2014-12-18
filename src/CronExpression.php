@@ -112,7 +112,7 @@ class CronExpression extends SimpleCron
      * Deterime if the cron is due to run based on the current date or a
      * specific date
      *
-     * @param string|DateTime $currentTime (optional) Relative calculation date
+     * @param string|\DateTime $currentTime (optional) Relative calculation date
      *
      * @return bool Returns TRUE if the cron is due to run or FALSE if not
      */
@@ -121,11 +121,11 @@ class CronExpression extends SimpleCron
         if (null === $currentTime || 'now' === $currentTime) {
             $currentDate = date('Y-m-d H:i:s');
             $currentTime = strtotime($currentDate);
-        } elseif ($currentTime instanceof DateTime) {
+        } elseif ($currentTime instanceof \DateTime) {
             $currentDate = $currentTime->format('Y-m-d H:i:s');
             $currentTime = strtotime($currentDate);
         } else {
-            $currentTime = new DateTime($currentTime);
+            $currentTime = new \DateTime($currentTime);
             $currentTime->setTime($currentTime->format('H'), $currentTime->format('i'), $currentTime->format('s'));
             $currentDate = $currentTime->format('Y-m-d H:i:s');
             $currentTime = $currentTime->getTimeStamp();
