@@ -216,4 +216,26 @@ class CronExpression extends SimpleCron
         throw new \RuntimeException('Impossible CRON expression');
         // @codeCoverageIgnoreEnd
     }
+
+    /**
+     * Set part of the CRON expression
+     *
+     * @param int    $position The position of the CRON expression to set
+     * @param string $value    The value to set
+     *
+     * @return \Cron\CronExpression
+     * @throws \InvalidArgumentException if the value is not valid for the part
+     */
+    public function setPart($position, $value)
+    {
+        if (!$this->fieldFactory->getField($position)->validate($value)) {
+            throw new \InvalidArgumentException(
+                'Invalid CRON field value ' . $value . ' as position ' . $position
+            );
+        }
+
+        $this->cronParts[$position] = $value;
+
+        return $this;
+    }
 }
