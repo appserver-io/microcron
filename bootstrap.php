@@ -23,4 +23,4 @@
  */
 
 $loader = require 'vendor/autoload.php';
-$loader->add('AppserverIo\\Appserver', 'src');
+$loader->add('\\AppserverIo\\Microcron\\', __DIR__ . DIRECTORY_SEPARATOR . 'src');

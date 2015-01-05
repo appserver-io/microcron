@@ -11,6 +11,7 @@
  *
  * @category  Library
  * @package   Microcron
+ * @author    Michael Dowling <mtdowling@gmail.com>
  * @author    Bernhard Wick <bw@appserver.io>
  * @copyright 2014 TechDivision GmbH - <info@appserver.io>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
@@ -28,12 +29,13 @@ use Cron\MonthField;
 use Cron\YearField;
 
 /**
- * AppserverIo\FieldFactory
+ * AppserverIo\Microcron\FieldFactory
  *
  * Flyweight factory which allows for the creation of FieldInterface implementation objects
  *
  * @category  Library
  * @package   Microcron
+ * @author    Michael Dowling <mtdowling@gmail.com>
  * @author    Bernhard Wick <bw@appserver.io>
  * @copyright 2014 TechDivision GmbH - <info@appserver.io>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)

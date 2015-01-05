@@ -11,6 +11,7 @@
  *
  * @category  Library
  * @package   Microcron
+ * @author    Michael Dowling <mtdowling@gmail.com>
  * @author    Bernhard Wick <bw@appserver.io>
  * @copyright 2014 TechDivision GmbH - <info@appserver.io>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
@@ -20,7 +21,7 @@
 namespace AppserverIo\Microcron;
 
 use Cron\CronExpression as SimpleCron;
-use Cron\FieldFactory;
+use Cron\FieldFactory as SimpleFieldFactory;
 
 /**
  * AppserverIo\Microcron
@@ -35,6 +36,7 @@ use Cron\FieldFactory;
  *
  * @category  Library
  * @package   Microcron
+ * @author    Michael Dowling <mtdowling@gmail.com>
  * @author    Bernhard Wick <bw@appserver.io>
  * @copyright 2014 TechDivision GmbH - <info@appserver.io>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
@@ -42,6 +44,11 @@ use Cron\FieldFactory;
  */
 class CronExpression extends SimpleCron
 {
+    /**
+     * Constants which define the position of semantic pieces of a DateTime object
+     *
+     * @var string
+     */
     const SECOND = 0;
     const MINUTE = 1;
     const HOUR = 2;
@@ -74,10 +81,10 @@ class CronExpression extends SimpleCron
     /**
      * Parse a CRON expression
      *
-     * @param string       $expression   CRON expression (e.g. '8 * * * *')
-     * @param FieldFactory $fieldFactory Factory to create cron fields
+     * @param string             $expression   CRON expression (e.g. '8 * * * *')
+     * @param SimpleFieldFactory $fieldFactory Factory to create cron fields
      */
-    public function __construct($expression, FieldFactory $fieldFactory)
+    public function __construct($expression, SimpleFieldFactory $fieldFactory)
     {
         $this->fieldFactory = $fieldFactory;
         $this->setExpression($expression);
@@ -88,8 +95,8 @@ class CronExpression extends SimpleCron
      * There are  several special predefined values which can be used to substitute the
      * CRON expression. You might see them below
      *
-     * @param string       $expression   The CRON expression to create
-     * @param FieldFactory $fieldFactory (optional) Field factory to use
+     * @param string             $expression   The CRON expression to create
+     * @param SimpleFieldFactory $fieldFactory (optional) Field factory to use
      *
      *      @yearly, @annually) - Run once a year, midnight, Jan. 1 - 0 0 0 1 1 *
      *      @monthly - Run once a month, midnight, first of month - 0 0 0 1 * *
@@ -101,7 +108,7 @@ class CronExpression extends SimpleCron
      *
      * @return CronExpression
      */
-    public static function factory($expression, FieldFactory $fieldFactory = null)
+    public static function factory($expression, SimpleFieldFactory $fieldFactory = null)
     {
         $mappings = array(
             '@yearly' => '0 0 0 1 1 *',
@@ -122,29 +129,23 @@ class CronExpression extends SimpleCron
     }
 
     /**
-     * Deterime if the cron is due to run based on the current date or a
-     * specific date
+     * Get all or part of the CRON expression
      *
-     * @param string|\DateTime $currentTime (optional) Relative calculation date
+     * @param string $part (optional) Specify the part to retrieve or NULL to
+     *      get the full cron schedule string.
      *
-     * @return bool Returns TRUE if the cron is due to run or FALSE if not
+     * @return string|null Returns the CRON expression, a part of the
+     *      CRON expression, or NULL if the part was specified but not found
      */
-    public function isDue($currentTime = null)
+    public function getExpression($part = null)
     {
-        if (null === $currentTime || 'now' === $currentTime) {
-            $currentDate = date('Y-m-d H:i:s');
-            $currentTime = strtotime($currentDate);
-        } elseif ($currentTime instanceof \DateTime) {
-            $currentDate = $currentTime->format('Y-m-d H:i:s');
-            $currentTime = strtotime($currentDate);
-        } else {
-            $currentTime = new \DateTime($currentTime);
-            $currentTime->setTime($currentTime->format('H'), $currentTime->format('i'), $currentTime->format('s'));
-            $currentDate = $currentTime->format('Y-m-d H:i:s');
-            $currentTime = $currentTime->getTimeStamp();
+        if (null === $part) {
+            return implode(' ', $this->cronParts);
+        } elseif (array_key_exists($part, $this->cronParts)) {
+            return $this->cronParts[$part];
         }
 
-        return $this->getNextRunDate($currentDate, 0, true)->getTimestamp() == $currentTime;
+        return null;
     }
 
     /**
@@ -215,6 +216,56 @@ class CronExpression extends SimpleCron
         // @codeCoverageIgnoreStart
         throw new \RuntimeException('Impossible CRON expression');
         // @codeCoverageIgnoreEnd
+    }
+
+    /**
+     * Determine if the CRON is due to run based, on the current date or a
+     * specific date
+     *
+     * @param string|\DateTime $currentTime (optional) Relative calculation date
+     *
+     * @return bool Returns TRUE if the cron is due to run or FALSE if not
+     */
+    public function isDue($currentTime = null)
+    {
+        if (null === $currentTime || 'now' === $currentTime) {
+            $currentDate = date('Y-m-d H:i:s');
+            $currentTime = strtotime($currentDate);
+        } elseif ($currentTime instanceof \DateTime) {
+            $currentDate = $currentTime->format('Y-m-d H:i:s');
+            $currentTime = strtotime($currentDate);
+        } else {
+            $currentTime = new \DateTime($currentTime);
+            $currentTime->setTime($currentTime->format('H'), $currentTime->format('i'), $currentTime->format('s'));
+            $currentDate = $currentTime->format('Y-m-d H:i:s');
+            $currentTime = $currentTime->getTimeStamp();
+        }
+
+        return $this->getNextRunDate($currentDate, 0, true)->getTimestamp() == $currentTime;
+    }
+
+    /**
+     * Set or change the CRON expression
+     *
+     * @param string $expression CRON expression (e.g. 8 * * * *)
+     *
+     * @return CronExpression
+     * @throws \InvalidArgumentException if not a valid CRON expression
+     */
+    public function setExpression($expression)
+    {
+        $this->cronParts = preg_split('/\s/', $expression, -1, PREG_SPLIT_NO_EMPTY);
+        if (count($this->cronParts) < 6) {
+            throw new \InvalidArgumentException(
+                $expression . ' is not a valid CRON expression'
+            );
+        }
+
+        foreach ($this->cronParts as $position => $part) {
+            $this->setPart($position, $part);
+        }
+
+        return $this;
     }
 
     /**
