@@ -7,13 +7,18 @@
  * that is available through the world-wide-web at this URL:
  * http://opensource.org/licenses/osl-3.0.php
  *
+ * Most of this work is derived from mtdowling/cron-expression which is copyrighted as:
+ * Copyright (c) 2011 Michael Dowling <mtdowling@gmail.com> and contributors
+ * The licence of this work can be found here: https://github.com/mtdowling/cron-expression/blob/master/LICENSE
+ *
+ * Some limitations might apply.
+ *
  * PHP version 5
  *
  * @category  Library
  * @package   Microcron
- * @author    Michael Dowling <mtdowling@gmail.com>
  * @author    Bernhard Wick <bw@appserver.io>
- * @copyright 2014 TechDivision GmbH - <info@appserver.io>
+ * @copyright 2015 TechDivision GmbH - <info@appserver.io>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      http://www.appserver.io/
  */
@@ -27,9 +32,8 @@ namespace AppserverIo\Microcron;
  *
  * @category  Library
  * @package   Microcron
- * @author    Michael Dowling <mtdowling@gmail.com>
  * @author    Bernhard Wick <bw@appserver.io>
- * @copyright 2014 TechDivision GmbH - <info@appserver.io>
+ * @copyright 2015 TechDivision GmbH - <info@appserver.io>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      http://www.appserver.io/
  */
@@ -37,7 +41,11 @@ class CronExpressionTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * @covers Cron\CronExpression::factory
+     * Tests if the cron expression factory recognizes existing templates
+     *
+     * @return null
+     *
+     * @covers AppserverIo\Microcron\CronExpression::factory
      */
     public function testFactoryRecognizesTemplates()
     {
@@ -52,9 +60,13 @@ class CronExpressionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Cron\CronExpression::__construct
-     * @covers Cron\CronExpression::getExpression
-     * @covers Cron\CronExpression::__toString
+     * Tests if the parser can make out the different parts of a cron expressions together with their semantic meaning
+     *
+     * @return null
+     *
+     * @covers AppserverIo\Microcron\CronExpression::__construct
+     * @covers AppserverIo\Microcron\CronExpression::getExpression
+     * @covers AppserverIo\Microcron\CronExpression::__toString
      */
     public function testParsesCronSchedule()
     {
@@ -79,8 +91,17 @@ class CronExpressionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Cron\CronExpression::__construct
-     * @covers Cron\CronExpression::getExpression
+     * Tests if the parser can handle different space characters in between semantic parts
+     * Uses a data provider
+     *
+     * @param string $schedule The oddly separated schedule to parse
+     * @param array  $expected The expected parts
+     *
+     * @return null
+     *
+     * @covers AppserverIo\Microcron\CronExpression::__construct
+     * @covers AppserverIo\Microcron\CronExpression::getExpression
+     *
      * @dataProvider scheduleWithDifferentSeparatorsProvider
      */
     public function testParsesCronScheduleWithAnySpaceCharsAsSeparators($schedule, array $expected)
@@ -111,19 +132,31 @@ class CronExpressionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Cron\CronExpression::__construct
-     * @covers Cron\CronExpression::setExpression
-     * @covers Cron\CronExpression::setPart
+     * Tests if impossible cron expressions will get objected
+     *
+     * @return null
+     *
+     * @covers AppserverIo\Microcron\CronExpression::__construct
+     * @covers AppserverIo\Microcron\CronExpression::setExpression
+     * @covers AppserverIo\Microcron\CronExpression::setPart
+     *
      * @expectedException \InvalidArgumentException
      */
     public function testInvalidCronsWillFail()
     {
-        // Only five values
+        // only five digits
         CronExpression::factory('* * * * 1');
+        // seven digits
+        CronExpression::factory('* * * * * * *');
     }
 
     /**
-     * @covers Cron\CronExpression::setPart
+     * Tests if the later addition of invalid parts gets objected
+     *
+     * @return null
+     *
+     * @covers AppserverIo\Microcron\CronExpression::setPart
+     *
      * @expectedException \InvalidArgumentException
      */
     public function testInvalidPartsWillFail()
@@ -142,8 +175,7 @@ class CronExpressionTest extends \PHPUnit_Framework_TestCase
         return array(
             array('0 */2 */2 * * *', '2015-08-10 21:47:27', '2015-08-10 22:00:00', false),
             array('* * * * * *', '2015-08-10 21:50:37', '2015-08-10 21:50:37', true),
-            array('* * * * * *', '2015-08-10 21:50:37', '2015-08-10 21:50:38', false),
-            array('* * * * * *', '2015-08-10 21:50:38', '2015-08-10 21:50:39', false),
+            array('* * * * * *', '2015-08-10 21:50:38', '2015-08-10 21:50:38', true),
             array('0 * 20,21,22 * * *', '2015-08-10 21:50:00', '2015-08-10 21:50:00', true),
             // Handles CSV values
             array('0 * 20,22 * * *', '2015-08-10 21:50:00', '2015-08-10 22:00:00', false),
@@ -198,7 +230,7 @@ class CronExpressionTest extends \PHPUnit_Framework_TestCase
             array('0 0 0 30W * *', strtotime('2011-07-01 00:00:00'), '2011-07-29 00:00:00', false),
             array('0 0 0 31W * *', strtotime('2011-07-01 00:00:00'), '2011-07-29 00:00:00', false),
             // Test the year field
-            array('* * * * * 2012', strtotime('2011-05-01 00:00:00'), '2012-01-01 00:00:00', false),
+            array('* * * * * * 2012', strtotime('2011-05-01 00:00:00'), '2012-01-01 00:00:00', false),
             // Test the last weekday of a month
             array('0 * * * * 5L', strtotime('2011-07-01 00:00:00'), '2011-07-29 00:00:00', false),
             array('0 * * * * 6L', strtotime('2011-07-01 00:00:00'), '2011-07-30 00:00:00', false),
@@ -214,15 +246,28 @@ class CronExpressionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Cron\CronExpression::isDue
-     * @covers Cron\CronExpression::getNextRunDate
+     * Tests if certain cron expressions will correctly state that they are due (or not) when checked against
+     * given dates.
+     * Uses a data provider
+     *
+     * @param string    $schedule     The cron expression to use
+     * @param \DateTime $relativeTime The current time assumed during testing
+     * @param string    $nextRun      The expected next run time
+     * @param boolean   $isDue        If the expression is due based on the given times
+     *
+     * @return null
+     *
+     * @covers AppserverIo\Microcron\CronExpression::isDue
+     * @covers AppserverIo\Microcron\CronExpression::getNextRunDate
      * @covers Cron\DayOfMonthField
      * @covers Cron\DayOfWeekField
      * @covers Cron\MinutesField
      * @covers Cron\HoursField
      * @covers Cron\MonthField
      * @covers Cron\YearField
-     * @covers Cron\CronExpression::getRunDate
+     * @covers AppserverIo\Microcron\SecondsField
+     * @covers AppserverIo\Microcron\CronExpression::getRunDate
+     *
      * @dataProvider scheduleProvider
      */
     public function testDeterminesIfCronIsDue($schedule, $relativeTime, $nextRun, $isDue)
@@ -235,14 +280,18 @@ class CronExpressionTest extends \PHPUnit_Framework_TestCase
             $relativeTime = new \DateTime($relativeTime);
         } elseif (is_int($relativeTime)) {
             $relativeTime = date('Y-m-d H:i:s', $relativeTime);
-        }error_log(var_export($relativeTime, true));
+        }
         $this->assertEquals($isDue, $cron->isDue($relativeTime));
         $next = $cron->getNextRunDate($relativeTime, 0, true);
         $this->assertEquals(new \DateTime($nextRun), $next);
     }
 
     /**
-     * @covers Cron\CronExpression::isDue
+     * Tests if the isDue() method can handle different input formats
+     *
+     * @return null
+     *
+     * @covers AppserverIo\Microcron\CronExpression::isDue
      */
     public function testIsDueHandlesDifferentDates()
     {
@@ -254,7 +303,11 @@ class CronExpressionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Cron\CronExpression::getPreviousRunDate
+     * Tests if it is possible to correctly obtain the previous run date
+     *
+     * @return null
+     *
+     * @covers AppserverIo\Microcron\CronExpression::getPreviousRunDate
      */
     public function testCanGetPreviousRunDates()
     {
@@ -275,21 +328,36 @@ class CronExpressionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Cron\CronExpression::getMultipleRunDates
+     * Tests if run dates can be projected into the future correctly
+     *
+     * @return null
+     *
+     * @covers AppserverIo\Microcron\CronExpression::getMultipleRunDates
      */
     public function testProvidesMultipleRunDates()
     {
         $cron = CronExpression::factory('0 */2 * * * *');
         $this->assertEquals(array(
-            new \DateTime('2008-11-09 00:00:00'),
-            new \DateTime('2008-11-09 00:02:00'),
-            new \DateTime('2008-11-09 00:04:00'),
-            new \DateTime('2008-11-09 00:06:00')
-        ), $cron->getMultipleRunDates(4, '2008-11-09 00:00:00', false, true));
+                new \DateTime('2008-11-09 00:00:00'),
+                new \DateTime('2008-11-09 00:02:00'),
+                new \DateTime('2008-11-09 00:04:00'),
+                new \DateTime('2008-11-09 00:06:00')
+            ), $cron->getMultipleRunDates(4, '2008-11-09 00:00:00', false, true));
+        $cron = CronExpression::factory('*/2 * * * * *');
+        $this->assertEquals(array(
+                new \DateTime('2008-11-09 00:00:00'),
+                new \DateTime('2008-11-09 00:00:02'),
+                new \DateTime('2008-11-09 00:00:04'),
+                new \DateTime('2008-11-09 00:00:06')
+            ), $cron->getMultipleRunDates(4, '2008-11-09 00:00:00', false, true));
     }
 
     /**
-     * @covers Cron\CronExpression
+     * Tests if iterating next run dates works as expected
+     *
+     * @return null
+     *
+     * @covers AppserverIo\Microcron\CronExpression
      */
     public function testCanIterateOverNextRuns()
     {
@@ -313,7 +381,11 @@ class CronExpressionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Cron\CronExpression::getRunDate
+     * Tests if the current date gets skipped
+     *
+     * @return null
+     *
+     * @covers AppserverIo\Microcron\CronExpression::getRunDate
      */
     public function testSkipsCurrentDateByDefault()
     {
@@ -324,8 +396,11 @@ class CronExpressionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Cron\CronExpression::getRunDate
-     * @ticket 7
+     * Tests if seconds do not get stripped as customary to cron
+     *
+     * @return null
+     *
+     * @covers AppserverIo\Microcron\CronExpression::getRunDate
      */
     public function testDoesNotStripForSeconds()
     {
@@ -335,7 +410,11 @@ class CronExpressionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Cron\CronExpression::getRunDate
+     * Tests for the fix of a certain PHP bug
+     *
+     * @return null
+     *
+     * @covers AppserverIo\Microcron\CronExpression::getRunDate
      */
     public function testFixesPhpBugInDateIntervalMonth()
     {
@@ -343,6 +422,11 @@ class CronExpressionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('2011-01-27 00:00:00', $cron->getPreviousRunDate('2011-08-22 00:00:00')->format('Y-m-d H:i:s'));
     }
 
+    /**
+     * Tests for known formatting problems
+     *
+     * @return null
+     */
     public function testIssue29()
     {
         $cron = CronExpression::factory('@weekly');

@@ -7,13 +7,18 @@
  * that is available through the world-wide-web at this URL:
  * http://opensource.org/licenses/osl-3.0.php
  *
+ * Some of this work is derived from mtdowling/cron-expression which is copyrighted as:
+ * Copyright (c) 2011 Michael Dowling <mtdowling@gmail.com> and contributors
+ * The licence of this work can be found here: https://github.com/mtdowling/cron-expression/blob/master/LICENSE
+ *
+ * Some limitations might apply.
+ *
  * PHP version 5
  *
  * @category  Library
  * @package   Microcron
- * @author    Michael Dowling <mtdowling@gmail.com>
  * @author    Bernhard Wick <bw@appserver.io>
- * @copyright 2014 TechDivision GmbH - <info@appserver.io>
+ * @copyright 2015 TechDivision GmbH - <info@appserver.io>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      http://www.appserver.io/
  */
@@ -36,9 +41,8 @@ use Cron\FieldFactory as SimpleFieldFactory;
  *
  * @category  Library
  * @package   Microcron
- * @author    Michael Dowling <mtdowling@gmail.com>
  * @author    Bernhard Wick <bw@appserver.io>
- * @copyright 2014 TechDivision GmbH - <info@appserver.io>
+ * @copyright 2015 TechDivision GmbH - <info@appserver.io>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      http://www.appserver.io/
  */
