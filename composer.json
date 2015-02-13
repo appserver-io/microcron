@@ -34,7 +34,8 @@
 	],
 	"support" : {
 		"email" : "bw@appserver.io",
-		"issues" : "https://github.com/appserver-io/microcron/issues",
+		"issues" : "https://github.com/appserver-io/appserverix" +
+"/issues",
 		"source" : "https://github.com/appserver-io/microcron"
 	},
 	"keywords" : [
