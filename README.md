@@ -1,11 +1,11 @@
 # Microcron
 
-[![Latest Stable Version](https://poser.pugx.org/appserver-io/microcron/v/stable.png)](https://packagist.org/packages/appserver-io/microcron)
-[![Total Downloads](https://poser.pugx.org/appserver-io/microcron/downloads.png)](https://packagist.org/packages/appserver-io/microcron)
-[![License](https://poser.pugx.org/appserver-io/microcron/license.png)](https://packagist.org/packages/appserver-io/microcron)
-[![Build Status](https://travis-ci.org/appserver-io/microcron.png)](https://travis-ci.org/appserver-io/microcron)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/appserver-io/microcron/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/appserver-io/microcron/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/appserver-io/microcron/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/appserver-io/microcron/?branch=master)
+[![Latest Stable Version](https://img.shields.io/packagist/v/appserver-io/microcron.svg?style=flat-square)](https://packagist.org/packages/appserver-io/microcron) 
+ [![Total Downloads](https://img.shields.io/packagist/dt/appserver-io/microcron.svg?style=flat-square)](https://packagist.org/packages/appserver-io/microcron)
+ [![License](https://img.shields.io/packagist/l/appserver-io/microcron.svg?style=flat-square)](https://packagist.org/packages/appserver-io/microcron)
+ [![Build Status](https://img.shields.io/travis/appserver-io/microcron/master.svg?style=flat-square)](http://travis-ci.org/appserver-io/microcron)
+ [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/appserver-io/microcron/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/appserver-io/microcron/?branch=master)
+ [![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/appserver-io/microcron/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/appserver-io/microcron/?branch=master)
 
 ## Introduction
 
@@ -13,6 +13,12 @@ This library aim for a complete PHP implementation of a cron expression with the
 Cron expressions used with this library have, other than [normal cron](https://en.wikipedia.org/wiki/Cron), 6 digits where as the schema starts with seconds and continues with a normal cron schedule.
 
 The `second`-digit can be used the same as the `minute` or `hour` digit.
+
+## Issues
+
+In order to bundle our efforts we would like to collect all issues regarding this package in [the main project repository's issue tracker](https://github.com/appserver-io/appserver/issues).
+Please reference the originating repository as the first element of the issue title e.g.:
+`[appserver-io/<ORIGINATING_REPO>] A issue I am having`
 
 ## Notice
 
