@@ -136,7 +136,7 @@ class CronExpression extends SimpleCron
      * Get all or part of the CRON expression
      *
      * @param string $part (optional) Specify the part to retrieve or NULL to
-     *      get the full cron schedule string.
+     *                     get the full cron schedule string.
      *
      * @return string|null Returns the CRON expression, a part of the
      *      CRON expression, or NULL if the part was specified but not found
@@ -159,7 +159,7 @@ class CronExpression extends SimpleCron
      * @param int              $nth              (optional) Number of matches to skip before returning
      * @param bool             $invert           (optional) Set to TRUE to go backwards in time
      * @param bool             $allowCurrentDate (optional) Set to TRUE to return the
-     *     current date if it matches the cron expression
+     *                                           current date if it matches the cron expression
      *
      * @return \DateTime
      * @throws \RuntimeException on too many iterations
