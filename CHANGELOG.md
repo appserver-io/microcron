@@ -1,3 +1,13 @@
+# Version 1.0.1
+
+## Bugfixes
+
+* Dependency updates
+
+## Features
+
+* None
+
 # Version 1.0.0
 
 ## Bugfixes
